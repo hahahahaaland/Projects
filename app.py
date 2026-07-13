@@ -27,6 +27,9 @@ def get_students():
 def add_student():
     data = request.get_json()
 
+    if not data or "name" not in data or "age" not in data:
+        return jsonify({"error": "Both name and age are required"}), 400
+
     conn = sqlite3.connect("training.db")
     cursor = conn.cursor()
 
@@ -38,7 +41,7 @@ def add_student():
     conn.commit()
     conn.close()
 
-    return jsonify({"message": "Student added successfully"})
+    return jsonify({"message": "Student added successfully"}), 201
 
 @app.route("/students/<int:id>", methods=["PUT"])
 def update_student(id):
